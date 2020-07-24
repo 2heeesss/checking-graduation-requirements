@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css?family=Black+Han+Sans:400');
+@import url('https://fonts.googleapis.com/css?family=Black+Han+Sans&display=swap&subset=korean');
+/* font-family: 'Black Han Sans', sans-serif; */
+
+body {
+  margin: 0;
+}
+a {
+  text-decoration: none;
+  color: gray;
+  font-family: 'Black Han Sans';
+}
+#main-article-wrap {
+  width: 100%;
+  min-width: 300px;
+  height: 850px;
+  background-image: url(bb1.png);
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#main-article-wrap p {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  line-height: 750px;
+  color: gray;
+  font-size: 7vw;
+  position: absolute;
+  font-family: 'Black Han Sans';
+}
+#sub1-article-wrap,
+#sub2-article-wrap,
+#sub3-article-wrap {
+  width: 100%;
+  min-width: 300px;
+  height: 850px;
+}
+#sub1-article-wrap {
+  background-image: url(background2_3.png);
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#seperate-article {
+  background-color: #dce3ef;
+  width: 100%;
+  height: 20px;
+}
+
+#sub1-article-wrap {
+  height: 850px;
+  display: table;
+  text-align: center;
+}
+
+.comment {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#sub1-article-wrap pre {
+  color: gray;
+}
+
+.informationImg {
+  text-align: center;
+}
+.informationImg img {
+  padding: 30px 0px 30px 0px;
+  max-width: 60%;
+  min-width: 500px;
+}
+.fileInput {
+  text-align: center;
+  max-width: 100%;
+  min-width: 500px;
+}
+.sub2-article-wrap {
+}
+#sub3-article-wrap {
+  text-align: center;
+}
+.result-wrap {
+  margin-top: 80px;
+  width: 800px;
+  height: auto;
+  border: solid;
+  border-color: gray;
+  border-width: 2px;
+  display: inline-block;
+}
+.navbar {
+  position: fixed;
+  top: 0;
+  /* width: 100% */
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-bottom: solid;
+  border-width: thin;
+  border-color: gray;
+  background-color: white;
+  padding: 8px 12px;
+  margin: 0 20px 0 20px;
+  z-index: 9999;
+}
+.navbar-logo {
+  font-size: 30px;
+  color: white;
+}
+
+.navbar-menu {
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+}
+
+.navbar-menu li {
+  padding: 8px 12px;
+}
+
+.navbar-menu li:hover {
+  background-color: #b9cde3;
+  border-radius: 4px;
+}
+
+@media screen and (max-width: 500px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px 24px;
+  }
+  .navbar-menu {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .navbar-menu li {
+    width: 100%;
+    text-align: center;
+  }
+}

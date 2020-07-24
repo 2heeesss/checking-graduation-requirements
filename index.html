@@ -1,18 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
     <meta charset="UTF-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Black+Han+Sans&display=swap&subset=korean"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="index.css" />
     <title>엑셀을 써보자</title>
   </head>
   <body>
-    <input type="file" id="excelFile" onchange="ReturnTotalCredit(event)" />
+    <header>
+      <nav class="navbar">
+        <div class="navbar-logo">
+          <a href="">졸.</a>
+        </div>
 
-    <input
-      type="file"
-      id="excelFile2"
-      onchange="CheckCompulsorySubject(event)"
-    />
+        <ul class="navbar-menu">
+          <li><a href="">홈</a></li>
+          <li><a href="">산공 새내기</a></li>
+          <li><a href="">소개</a></li>
+        </ul>
+
+        <a href="" class="navbar-toggleBtn"> </a>
+      </nav>
+    </header>
+
+    <section>
+      <div class="section-wrap">
+        <article>
+          <div id="main-article-wrap">
+            <p>졸업할래?</p>
+          </div>
+          <div id="seperate-article"></div>
+        </article>
+
+        <article>
+          <div id="sub1-article-wrap">
+            <div class="comment">
+              <pre>
+              졸업할래? 는 과기대 학생들을 위해 만들어졌습니다
+              통합정보시스템에서 확인하기 어려운 <strong> 졸업요건을 한번에 보여드립니다.</strong>
+              통합정보시스템에서 아래 사진과 같이 접속합니다
+              각 페이지에서 엑셀파일을 다운받은후, 순서대로 업로드합니다.
+            </pre>
+            </div>
+          </div>
+          <div id="seperate-article"></div>
+          <div id="sub2-article-wrap">
+            <div class="informationImg">
+              <img src="필수조회2.png" alt="ㅋㅋ" />
+              <img src="개인별성적1.png" alt="ㅋㅋ" />
+            </div>
+
+            <div class="fileInput">
+              첫번째 파일 업로드합니다
+              <input
+                type="file"
+                id="excelFile"
+                onchange="ReturnTotalCredit(event)"
+              />
+              두번째 파일 업로드합니다
+              <input
+                type="file"
+                id="excelFile2"
+                onchange="CheckCompulsorySubject(event)"
+              />
+            </div>
+          </div>
+          <div id="seperate-article"></div>
+          <div id="sub3-article-wrap">
+            <div class="result-wrap">
+              <p id="res1">총학점</p>
+              <p id="res2">전공학점</p>
+              <p id="res3">결과</p>
+              <p id="res4">결과</p>
+            </div>
+          </div>
+          <div id="seperate-article"></div>
+        </article>
+      </div>
+    </section>
+
     <script src="index.js"></script>
   </body>
 </html>
