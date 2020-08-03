@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="index.css" />
     <title>엑셀을 써보자</title>
   </head>
-  <body>
+  <body id="body">
     <header>
       <nav class="navbar">
         <div class="navbar-logo">
@@ -26,7 +26,10 @@
         <a href="" class="navbar-toggleBtn"> </a>
       </nav>
     </header>
-
+    <div id="modal">
+      안녕 <br />
+      <button onclick="CloseModal()">닫기버튼</button>
+    </div>
     <section>
       <div class="section-wrap">
         <article>
@@ -67,6 +70,9 @@
                 id="excelFile2"
                 onchange="CheckCompulsorySubject(event)"
               />
+              <button id="modalOpen" onclick="OpenModal()">
+                결과버튼 누르세욘
+              </button>
             </div>
           </div>
           <div id="seperate-article"></div>

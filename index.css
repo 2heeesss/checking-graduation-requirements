@@ -10,6 +10,17 @@ a {
   color: gray;
   font-family: 'Black Han Sans';
 }
+#modal {
+  /* z-index: -999;
+  opacity: 0; */
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  height: 200px;
+  width: 200px;
+  background-color: gold;
+}
 #main-article-wrap {
   width: 100%;
   min-width: 300px;

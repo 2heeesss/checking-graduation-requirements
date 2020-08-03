@@ -208,3 +208,13 @@ function CheckCompulsorySubject(event) {
   //적어줘야지 실행됨
   reader.readAsBinaryString(input.files[0]);
 }
+
+let a = document.getElementById('modal');
+let b = document.getElementById('body');
+function OpenModal() {
+  a.style.display = 'block';
+}
+
+function CloseModal() {
+  a.style.display = 'none';
+}
