@@ -24,9 +24,9 @@ function ReturnTotalCredit(event) {
       let res1 = document.getElementById('res1');
       res1.innerHTML = CheckMajorCredit();
 
-      userData[j].취득.includes('성적');
-      if (CheckMajorCredit().includes('만족')) {
-      }
+      // userData[j].취득.includes('성적');
+      // if (CheckMajorCredit().includes('만족')) {
+      // }
 
       let res2 = document.getElementById('res2');
       res2.innerHTML = CheckGraduationCredit();
@@ -36,18 +36,17 @@ function ReturnTotalCredit(event) {
       //console.log('복수?전공?: ' + userData[doubleMajorIndex].__EMPTY_16);
       console.log('이수학점: ' + finalCredit);
       console.log('최종 성적: ' + finalScore);
-      //console.log(res1.innerHTML);
 
       CheckGraduationCredit();
       CheckMajorCredit();
       DoubleMajorCheck();
       LinkMajorCheck();
-
-      //전체파일
+      console.log(CheckDoubleMajor());
       console.log(userData);
 
       //함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       //복수전공 확인%%%%%%%%%%%더 추가할거야 %%%%%%%%%%%%%%%
+
       function DoubleMajorCheck() {
         if (doubleMajorCredit == undefined) {
           console.log('복수전공 XXX');
@@ -67,16 +66,25 @@ function ReturnTotalCredit(event) {
       //조건1. 총 졸업학점 채웠는지 확인***************************
       function CheckGraduationCredit() {
         let state;
+        const before16FinalCredit = 140;
+        const after16FinalCredit = 130;
+
         if (userAdmissionYear <= 16) {
-          if (finalCredit >= 140) {
+          if (finalCredit >= before16FinalCredit) {
             //state = console.log('16년이후기준: 총 졸업학점 채웠으');
-            state = userAdmissionYear + '학년도 총 졸업학점 만족';
+            state =
+              userAdmissionYear +
+              '학년 총 졸업학점: ' +
+              before16FinalCredit +
+              '</br>' +
+              '이수 학점: ' +
+              finalCredit;
           } else {
             //state = console.log('16년이후기준: 총 졸업학점 아직 못채웠으');
             state = userAdmissionYear + '학년도 총 졸업학점 불만족';
           }
         } else if (userAdmissionYear > 16) {
-          if (finalCredit >= 130) {
+          if (finalCredit >= after16FinalCredit) {
             //state = console.log('17년이후기준: 총 졸업학점 채웠으');
             state = userAdmissionYear + '학년도 총 졸업학점 만족';
           } else {
@@ -92,24 +100,55 @@ function ReturnTotalCredit(event) {
         let essentialMajorCredit = userData[finalCreditIndex].__EMPTY_8; //전공필수
         let optionalMajorCredit = userData[finalCreditIndex].__EMPTY_13; //전공선택
         let majorCredit = essentialMajorCredit + optionalMajorCredit;
+        const majorCreditCriterion = 75;
         let state;
 
-        if (majorCredit >= 75) {
-          //state = console.log('전공학점 채웠으');
-          state = '전공학점 조건 만족';
+        if (majorCredit >= majorCreditCriterion) {
+          console.log(
+            '전공 졸업기준: ' +
+              majorCreditCriterion +
+              '전공 이수학점' +
+              majorCredit
+          );
+          state =
+            '전공 졸업기준: ' +
+            majorCreditCriterion +
+            '</br>' +
+            '전공 이수학점' +
+            majorCredit;
         } else {
-          //state = console.log('전공학점 아직 못채웠으');
+          console.log('전공학점 아직 못채웠으');
           state = '전공학점 조건 불만족';
         }
         return state;
       }
 
-      //학번확인하기***************************
+      //학번확인하기
       function userID() {
         let studentID = userData[0].__EMPTY_10;
         let studentAdmissionYear = studentID.slice(0, 2);
 
         return studentAdmissionYear;
+      }
+
+      //복수전공인지 부전공인지 확인해주는 함수
+      function CheckDoubleMajor() {
+        for (let i = 0; i < userData.length; i++) {
+          let state = '';
+          if (
+            userData[i].__EMPTY_28 &&
+            userData[i].__EMPTY_28.includes('복수전공')
+          ) {
+            return '복수전공 듣는사람';
+          } else if (
+            userData[i].__EMPTY_28 &&
+            userData[i].__EMPTY_28.includes('부전공')
+          ) {
+            return '부전공 듣는사람';
+          } else {
+          }
+        }
+        return '본전공만 듣는사람';
       }
     });
   };
@@ -197,7 +236,7 @@ function CheckCompulsorySubject(event) {
       //안들은 영역
       console.log(NotTakeList());
 
-      //결과------------------------------------------------------------------------------------------------------------------------
+      //과------------------------------------------------------------------------------------------------------------------------
       let res3 = document.getElementById('res3');
       res3.innerHTML = '수강하지않은 전공필수과목: ' + leftSubject;
 

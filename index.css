@@ -15,10 +15,10 @@ a {
   opacity: 0; */
   display: none;
   position: fixed;
-  left: 50%;
-  top: 50%;
-  height: 200px;
-  width: 200px;
+  left: 30%;
+  top: 30%;
+  height: 800px;
+  width: 800px;
   background-color: gold;
 }
 #main-article-wrap {
