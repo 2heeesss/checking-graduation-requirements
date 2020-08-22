@@ -33,8 +33,9 @@ function ReturnTotalCredit(event) {
       CheckGraduationCredit();
       CheckMajorCredit();
 
-      //console.log(CheckDoubleMajorOrMinor());
       console.log(userData);
+      console.log(CheckDoubleMajorOrMinor());
+      console.log(CheckOnlyMajor());
 
       //함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -91,27 +92,32 @@ function ReturnTotalCredit(event) {
       // }
       //console.log(CheckDoubleMajorOrMinor2());
 
-      //조건2. 전공이수학점 채웠는지 확인***************************
-      function CheckMajorCredit() {
-        function CheckDoubleMajorOrMinor() {
-          let state = '';
-          for (let i = 0; i < userData.length; i++) {
-            if (
-              userData[i].__EMPTY_28 &&
-              userData[i].__EMPTY_28.includes('복수전공')
-            ) {
-              return 'double-major';
-            } else if (
-              userData[i].__EMPTY_28 &&
-              userData[i].__EMPTY_28.includes('부전공')
-            ) {
-              return 'minor';
-            } else {
-            }
+      //전공 확인해줌
+      function CheckDoubleMajorOrMinor() {
+        let state = '';
+        for (let i = 0; i < userData.length; i++) {
+          if (
+            userData[i].__EMPTY_28 &&
+            userData[i].__EMPTY_28.includes('복수전공')
+          ) {
+            return 'double-major';
+          } else if (
+            userData[i].__EMPTY_28 &&
+            userData[i].__EMPTY_28.includes('부전공')
+          ) {
+            return 'minor';
+          } else {
           }
         }
-        console.log(CheckDoubleMajorOrMinor());
+      }
+      function CheckOnlyMajor() {
+        if (CheckDoubleMajorOrMinor() === undefined) {
+          return 'major';
+        }
+      }
 
+      //조건2. 전공이수학점 채웠는지 확인***************************
+      function CheckMajorCredit() {
         let essentialMajorCredit = userData[finalCreditIndex].__EMPTY_8; //전공필수
         let optionalMajorCredit = userData[finalCreditIndex].__EMPTY_13; //전공선택
         let majorCredit = essentialMajorCredit + optionalMajorCredit;
@@ -168,7 +174,8 @@ function ReturnTotalCredit(event) {
               );
             }
           } else if (CheckDoubleMajorOrMinor === 'major-only') {
-          }             if (doubleCredit >= before16_DoubleMajorMustCredit) {
+          }
+          if (doubleCredit >= before16_DoubleMajorMustCredit) {
             console.log(
               userAdmissionYear +
                 '년도 기준 복수전공 이수학점: ' +
@@ -187,18 +194,14 @@ function ReturnTotalCredit(event) {
                 '!!기준불만족ㅜㅠ!!'
             );
           }
-          } else if(userAdmissionYear > 16){
-        
-            if (CheckDoubleMajorOrMinor === 'double-major') {
-              
-            } else if (CheckDoubleMajorOrMinor === 'minor') {
-            } else if (CheckDoubleMajorOrMinor === 'major-only') {
-            }
+        } else if (userAdmissionYear > 16) {
+          if (CheckDoubleMajorOrMinor === 'double-major') {
+          } else if (CheckDoubleMajorOrMinor === 'minor') {
+          } else if (CheckDoubleMajorOrMinor === 'major-only') {
           }
-          }
-        
+        }
 
-        function correct() {}
+        //function correct() {}
 
         // if (majorCredit >= majorCreditCriterion) {
         //   console.log(
