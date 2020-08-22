@@ -34,8 +34,10 @@ function ReturnTotalCredit(event) {
       CheckMajorCredit();
 
       console.log(userData);
+      //console.log(typeof userID()); //number 맞음
       console.log(CheckDoubleMajorOrMinor());
       console.log(CheckOnlyMajor());
+      console.log(CheckMajorCredit());
 
       //함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -92,7 +94,7 @@ function ReturnTotalCredit(event) {
       // }
       //console.log(CheckDoubleMajorOrMinor2());
 
-      //전공 확인해줌
+      //복전or부전 확인
       function CheckDoubleMajorOrMinor() {
         let state = '';
         for (let i = 0; i < userData.length; i++) {
@@ -110,17 +112,29 @@ function ReturnTotalCredit(event) {
           }
         }
       }
+      //본전공만 듣는지 확인
       function CheckOnlyMajor() {
         if (CheckDoubleMajorOrMinor() === undefined) {
           return 'major';
         }
       }
 
+      //학점 undefined 인거 0으로 바꿔주기
+      function CheckCreditZero(userMajorCredit) {
+        if (userMajorCredit === undefined) {
+          return (userMajorCredit = 0);
+        } else {
+          return parseInt(userMajorCredit);
+        }
+      }
+      console.log(CheckCreditZero(linkMajorCredit));
+      console.log(CheckCreditZero(doubleMajorCredit));
+
       //조건2. 전공이수학점 채웠는지 확인***************************
       function CheckMajorCredit() {
         let essentialMajorCredit = userData[finalCreditIndex].__EMPTY_8; //전공필수
         let optionalMajorCredit = userData[finalCreditIndex].__EMPTY_13; //전공선택
-        let majorCredit = essentialMajorCredit + optionalMajorCredit;
+        let majorCredit = essentialMajorCredit + optionalMajorCredit; //복수 or 부전공 이수학점
         const majorCreditCriterion = 75;
         const before16_DoubleMajorMustCredit = 42;
         const after16_DoubleMajorMustCredit = 39;
@@ -129,77 +143,40 @@ function ReturnTotalCredit(event) {
         const after16_MajorOfMinorCredit = 54;
         const after16_MinorCredit = 21;
 
-        let doubleCredit = doubleMajorCredit + linkMajorCredit;
+        //let doubleCredit = parseInt(doubleMajorCredit + linkMajorCredit);
+        let a = parseInt(linkMajorCredit);
+        let b = parseInt(doubleMajorCredit);
+        console.log(a, b);
+        console.log(a + b);
+        console.log(linkMajorCredit, doubleMajorCredit);
 
-        let state;
-        if (userAdmissionYear <= 16) {
+        let state = '';
+        if ((userAdmissionYear = 16)) {
           if (CheckDoubleMajorOrMinor === 'double-major') {
             if (doubleCredit >= before16_DoubleMajorMustCredit) {
-              console.log(
-                userAdmissionYear +
-                  '년도 기준 복수전공 이수학점: ' +
-                  before16_DoubleMajorMustCredit +
-                  '본인 이수학점: ' +
-                  doubleCredit +
-                  '!!기준만족!!'
-              );
+              state = '오오오';
             } else if (doubleCredit < before16_DoubleMajorMustCredit) {
-              console.log(
-                userAdmissionYear +
-                  '년도 기준 복수전공 이수학점: ' +
-                  before16_DoubleMajorMustCredit +
-                  '본인 이수학점: ' +
-                  doubleCredit +
-                  '!!기준불만족ㅜㅠ!!'
-              );
+              state = '우우웅';
+            } else {
+              state = '이상해씨';
             }
           } else if (CheckDoubleMajorOrMinor === 'minor') {
             if (doubleCredit >= before16_DoubleMajorMustCredit) {
-              console.log(
-                userAdmissionYear +
-                  '년도 기준 복수전공 이수학점: ' +
-                  before16_DoubleMajorMustCredit +
-                  '본인 이수학점: ' +
-                  doubleCredit +
-                  '!!기준만족!!'
-              );
             } else if (doubleCredit < before16_DoubleMajorMustCredit) {
-              console.log(
-                userAdmissionYear +
-                  '년도 기준 복수전공 이수학점: ' +
-                  before16_DoubleMajorMustCredit +
-                  '본인 이수학점: ' +
-                  doubleCredit +
-                  '!!기준불만족ㅜㅠ!!'
-              );
             }
           } else if (CheckDoubleMajorOrMinor === 'major-only') {
-          }
-          if (doubleCredit >= before16_DoubleMajorMustCredit) {
-            console.log(
-              userAdmissionYear +
-                '년도 기준 복수전공 이수학점: ' +
-                before16_DoubleMajorMustCredit +
-                '본인 이수학점: ' +
-                doubleCredit +
-                '!!기준만족!!'
-            );
-          } else if (doubleCredit < before16_DoubleMajorMustCredit) {
-            console.log(
-              userAdmissionYear +
-                '년도 기준 복수전공 이수학점: ' +
-                before16_DoubleMajorMustCredit +
-                '본인 이수학점: ' +
-                doubleCredit +
-                '!!기준불만족ㅜㅠ!!'
-            );
-          }
-        } else if (userAdmissionYear > 16) {
-          if (CheckDoubleMajorOrMinor === 'double-major') {
-          } else if (CheckDoubleMajorOrMinor === 'minor') {
-          } else if (CheckDoubleMajorOrMinor === 'major-only') {
+            if (doubleCredit >= before16_DoubleMajorMustCredit) {
+            } else if (doubleCredit < before16_DoubleMajorMustCredit) {
+            }
           }
         }
+        //else if (userAdmissionYear > 16) {
+        //   if (CheckDoubleMajorOrMinor === 'double-major') {
+        //   } else if (CheckDoubleMajorOrMinor === 'minor') {
+        //   } else if (CheckDoubleMajorOrMinor === 'major-only') {
+        //   }
+        //   return state;
+        // }
 
         //function correct() {}
 
@@ -227,6 +204,7 @@ function ReturnTotalCredit(event) {
       function userID() {
         let studentID = userData[0].__EMPTY_10;
         let studentAdmissionYear = studentID.slice(0, 2);
+        studentAdmissionYear = parseInt(studentAdmissionYear);
 
         return studentAdmissionYear;
       }
