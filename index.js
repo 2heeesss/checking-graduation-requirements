@@ -124,6 +124,7 @@ function ReturnTotalCredit(event) {
 
         return state;
       }
+      //복전 본전공 확인
       function CheckMajorCredit() {
         const before16_MajorMustCredit = 42;
         const after16_MajorMustCredit = 39;
