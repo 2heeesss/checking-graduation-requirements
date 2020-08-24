@@ -259,48 +259,71 @@ function CheckCompulsorySubject(event) {
     workbook.SheetNames.forEach(function (sheetName) {
       //시트를 JSON파일로 변환
       let userData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-      //ㅇㅇ
       let completeSubject = [];
       let leftSubject = [];
       let subjectAreaList = [];
 
-      for (let i = 0; i < userData.length; i++) {
-        //무조건 수강해아하는 과목
-        if (userData[i].선택구분 == undefined) {
-          if (userData[i].취득 == ' ') {
-            leftSubject[i] = userData[i].교과목명;
-          } else {
-            //모두수강했으
-          }
-        }
-        //택1 들어야하는것들
-        else {
-          subjectAreaList[i] = userData[i].영역구분;
-          for (let j = 0; j < userData.length; j++) {
-            if (
-              userData[i].영역구분 === userData[j].영역구분 &&
-              userData[j].취득.includes('성적')
-            ) {
-              completeSubject[i] = userData[i].영역구분;
+      //필수과목
+      function MustSubjectList() {
+        for (let i = 0; i < userData.length; i++) {
+          if (userData[i].선택구분 === undefined) {
+            if (userData[i].취득 === ' ') {
+              leftSubject[i] = userData[i].교과목명;
             } else {
-              //안들은건 괜츈
+              //모두수강했으
             }
           }
         }
       }
 
-      //****************************************수강하지않은 영역
-      function NotTakeList() {
-        let newList = subjectAreaList.filter(function (x) {
-          return completeSubject.indexOf(x) < 0;
-        });
-
-        //newList = newList;
-
-        return newList;
+      //선택영역
+      function ChoiceSubjectList() {
+        for (let i = 0; i < userData.length; i++) {
+          if (userData[i].선택구분 !== undefined) {
+            subjectAreaList[i] = userData[i].영역구분;
+            for (let j = 0; j < userData.length; j++) {
+              if (
+                userData[i].영역구분 === userData[j].영역구분 &&
+                userData[j].취득.includes('성적')
+              ) {
+                completeSubject[i] = userData[i].영역구분;
+              } else {
+                //안들은건 괜츈
+              }
+            }
+          }
+        }
       }
 
-      //****************************************겹치는거 제거
+      MustSubjectList();
+      ChoiceSubjectList();
+
+      // for (let i = 0; i < userData.length; i++) {
+      //   //무조건 수강해아하는 과목
+      //   if (userData[i].선택구분 == undefined) {
+      //     if (userData[i].취득 == ' ') {
+      //       leftSubject[i] = userData[i].교과목명;
+      //     } else {
+      //       //모두수강했으
+      //     }
+      //   }
+      //   //택1 들어야하는것들
+      //   else {
+      //     subjectAreaList[i] = userData[i].영역구분;
+      //     for (let j = 0; j < userData.length; j++) {
+      //       if (
+      //         userData[i].영역구분 === userData[j].영역구분 &&
+      //         userData[j].취득.includes('성적')
+      //       ) {
+      //         completeSubject[i] = userData[i].영역구분;
+      //       } else {
+      //         //안들은건 괜츈
+      //       }
+      //     }
+      //   }
+      // }
+
+      // 겹치는거 제거
       function DeleteOverlapList(beforeSetList) {
         return Array.from(new Set(beforeSetList));
       }
@@ -308,13 +331,72 @@ function CheckCompulsorySubject(event) {
       leftSubject = DeleteOverlapList(leftSubject);
       subjectAreaList = DeleteOverlapList(subjectAreaList);
 
-      //****************************************Undefined제거하기
+      // Undefined제거하기
       function DeleteNull(subjectList) {
         return subjectList.filter(Boolean);
       }
       completeSubject = DeleteNull(completeSubject);
       leftSubject = DeleteNull(leftSubject);
       subjectAreaList = DeleteNull(subjectAreaList);
+
+      // 수강하지않은 영역
+      function NotTakeList() {
+        let newList = subjectAreaList.filter(function (x) {
+          return completeSubject.indexOf(x) < 0;
+        });
+        return newList;
+      }
+
+      // 2차원 배열 생성
+      function create2DArray(rows, columns) {
+        let arr = new Array(rows);
+        for (var i = 0; i < rows; i++) {
+          arr[i] = new Array(columns);
+        }
+        return arr;
+      }
+
+      let notTakelist = create2DArray(NotTakeList().length, userData.length);
+      let countList = [];
+      let count = 0;
+      function NotTakeSubjectList() {
+        for (let i = 0; i < NotTakeList().length; i++) {
+          for (let j = 0; j < userData.length; j++) {
+            if (NotTakeList()[i] === userData[j].영역구분) {
+              notTakelist[i][j] = userData[j].교과목명;
+              if (notTakelist[i][j].length) {
+                count++;
+                countList[i] = count;
+              }
+            }
+          }
+          count = 0;
+        }
+      }
+      NotTakeSubjectList();
+
+      function ListSort() {
+        for (let i = 0; i < NotTakeList().length; i++) {
+          notTakelist[i].sort((a, b) => b.length - a.length);
+        }
+      }
+      ListSort();
+
+      function ListSplice() {
+        for (let i = 0; i < NotTakeList().length; i++) {
+          notTakelist[i].splice(countList[i], userData.length);
+        }
+      }
+      ListSplice();
+
+      function ListJoinOR() {
+        for (let i = 0; i < NotTakeList().length; i++) {
+          console.log(notTakelist[i].join(' or '));
+        }
+      }
+      ListJoinOR();
+
+      console.log(notTakelist);
 
       //********************************************************************************출력****************************************
       //전체파일
@@ -340,7 +422,7 @@ function CheckCompulsorySubject(event) {
 }
 
 let a = document.getElementById('modal');
-let b = document.getElementById('body');
+
 function OpenModal() {
   a.style.display = 'block';
 }
