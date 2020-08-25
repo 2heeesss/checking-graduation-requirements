@@ -390,13 +390,36 @@ function CheckCompulsorySubject(event) {
       ListSplice();
 
       function ListJoinOR() {
+        let okok = [];
         for (let i = 0; i < NotTakeList().length; i++) {
-          console.log(notTakelist[i].join(' or '));
+          okok[i] = notTakelist[i].join(' or ');
         }
+
+        return okok;
       }
       ListJoinOR();
 
       console.log(notTakelist);
+      console.log(ListJoinOR());
+      console.log(typeof ListJoinOR());
+      let k = ListJoinOR();
+
+      function EnterList(List) {
+        let newList = '';
+        for (let i = 0; i < List.length; i++) {
+          newList += List[i] + '</br>';
+        }
+        return newList;
+      }
+      let u = EnterList(ListJoinOR());
+
+      //오브젝트를 문자열로
+      //var result = test.replace('가', '나');
+
+      // k = JSON.stringify(k);
+      // console.log(k, typeof k);
+      // let kk = k.replace(/,/gi, '\n');
+      // console.log(kk);
 
       //********************************************************************************출력****************************************
       //전체파일
@@ -414,7 +437,7 @@ function CheckCompulsorySubject(event) {
       res3.innerHTML = '수강하지않은 전공필수과목: ' + leftSubject;
 
       let res4 = document.getElementById('res4');
-      res4.innerHTML = '수강하지않은 영역: ' + NotTakeList();
+      res4.innerHTML = '수강하지않은 영역: ' + u;
     });
   };
   //적어줘야지 실행됨
