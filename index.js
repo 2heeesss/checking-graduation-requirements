@@ -284,6 +284,7 @@ function CheckCompulsorySubject(event) {
             for (let j = 0; j < userData.length; j++) {
               if (
                 userData[i].영역구분 === userData[j].영역구분 &&
+                userData[j].취득 &&
                 userData[j].취득.includes('성적')
               ) {
                 completeSubject[i] = userData[i].영역구분;
@@ -355,6 +356,16 @@ function CheckCompulsorySubject(event) {
         }
         return arr;
       }
+
+      function FindOldStudent() {
+        for (let i = 0; i < userData.length; i++) {
+          if (userData[i].영역구분 === '제5영역') {
+            return 'old';
+          }
+        }
+        return 'young';
+      }
+      console.log(FindOldStudent());
 
       let notTakelist = create2DArray(NotTakeList().length, userData.length);
       let countList = [];
@@ -452,4 +463,211 @@ function OpenModal() {
 
 function CloseModal() {
   a.style.display = 'none';
+}
+
+function Check(event) {
+  let input = event.target;
+  let reader = new FileReader();
+
+  reader.onload = function () {
+    let fileData = reader.result;
+    let workbook = XLSX.read(fileData, { bookType: 'xlsx', type: 'binary' });
+
+    workbook.SheetNames.forEach(function (sheetName) {
+      //시트를 JSON파일로 변환
+      let userData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+      let completeSubject = [];
+      let leftSubject = [];
+      let subjectAreaList = [];
+
+      //필수과목
+      function MustSubjectList() {
+        for (let i = 0; i < userData.length; i++) {
+          if (userData[i].선택구분 === undefined) {
+            if (userData[i].취득 === ' ') {
+              leftSubject[i] = userData[i].교과목명;
+            } else {
+              //모두수강했으
+            }
+          }
+        }
+      }
+
+      //선택영역
+      function ChoiceSubjectList() {
+        for (let i = 0; i < userData.length; i++) {
+          if (userData[i].선택구분 !== undefined) {
+            subjectAreaList[i] = userData[i].영역구분;
+            for (let j = 0; j < userData.length; j++) {
+              if (
+                userData[i].영역구분 === userData[j].영역구분 &&
+                userData[j].취득 &&
+                userData[j].취득.includes('성적')
+              ) {
+                completeSubject[i] = userData[i].영역구분;
+              } else {
+                //안들은건 괜츈
+              }
+            }
+          }
+        }
+      }
+
+      MustSubjectList();
+      ChoiceSubjectList();
+
+      // for (let i = 0; i < userData.length; i++) {
+      //   //무조건 수강해아하는 과목
+      //   if (userData[i].선택구분 == undefined) {
+      //     if (userData[i].취득 == ' ') {
+      //       leftSubject[i] = userData[i].교과목명;
+      //     } else {
+      //       //모두수강했으
+      //     }
+      //   }
+      //   //택1 들어야하는것들
+      //   else {
+      //     subjectAreaList[i] = userData[i].영역구분;
+      //     for (let j = 0; j < userData.length; j++) {
+      //       if (
+      //         userData[i].영역구분 === userData[j].영역구분 &&
+      //         userData[j].취득.includes('성적')
+      //       ) {
+      //         completeSubject[i] = userData[i].영역구분;
+      //       } else {
+      //         //안들은건 괜츈
+      //       }
+      //     }
+      //   }
+      // }
+
+      // 겹치는거 제거
+      function DeleteOverlapList(beforeSetList) {
+        return Array.from(new Set(beforeSetList));
+      }
+      completeSubject = DeleteOverlapList(completeSubject);
+      leftSubject = DeleteOverlapList(leftSubject);
+      subjectAreaList = DeleteOverlapList(subjectAreaList);
+
+      // Undefined제거하기
+      function DeleteNull(subjectList) {
+        return subjectList.filter(Boolean);
+      }
+      completeSubject = DeleteNull(completeSubject);
+      leftSubject = DeleteNull(leftSubject);
+      subjectAreaList = DeleteNull(subjectAreaList);
+
+      // 수강하지않은 영역
+      function NotTakeList() {
+        let newList = subjectAreaList.filter(function (x) {
+          return completeSubject.indexOf(x) < 0;
+        });
+        return newList;
+      }
+
+      // 2차원 배열 생성
+      function create2DArray(rows, columns) {
+        let arr = new Array(rows);
+        for (var i = 0; i < rows; i++) {
+          arr[i] = new Array(columns);
+        }
+        return arr;
+      }
+
+      function FindOldStudent() {
+        for (let i = 0; i < userData.length; i++) {
+          if (userData[i].영역구분 === '제5영역') {
+            return 'old';
+          }
+        }
+        return 'young';
+      }
+      console.log(FindOldStudent());
+
+      let notTakelist = create2DArray(NotTakeList().length, userData.length);
+      let countList = [];
+      let count = 0;
+      function NotTakeSubjectList() {
+        for (let i = 0; i < NotTakeList().length; i++) {
+          for (let j = 0; j < userData.length; j++) {
+            if (NotTakeList()[i] === userData[j].영역구분) {
+              notTakelist[i][j] = userData[j].교과목명;
+              if (notTakelist[i][j].length) {
+                count++;
+                countList[i] = count;
+              }
+            }
+          }
+          count = 0;
+        }
+      }
+      NotTakeSubjectList();
+
+      function ListSort() {
+        for (let i = 0; i < NotTakeList().length; i++) {
+          notTakelist[i].sort((a, b) => b.length - a.length);
+        }
+      }
+      ListSort();
+
+      function ListSplice() {
+        for (let i = 0; i < NotTakeList().length; i++) {
+          notTakelist[i].splice(countList[i], userData.length);
+        }
+      }
+      ListSplice();
+
+      function ListJoinOR() {
+        let okok = [];
+        for (let i = 0; i < NotTakeList().length; i++) {
+          okok[i] = notTakelist[i].join(' or ');
+        }
+
+        return okok;
+      }
+      ListJoinOR();
+
+      console.log(notTakelist);
+      console.log(ListJoinOR());
+      console.log(typeof ListJoinOR());
+      let k = ListJoinOR();
+
+      function EnterList(List) {
+        let newList = '';
+        for (let i = 0; i < List.length; i++) {
+          newList += List[i] + '</br>';
+        }
+        return newList;
+      }
+      let u = EnterList(ListJoinOR());
+
+      //오브젝트를 문자열로
+      //var result = test.replace('가', '나');
+
+      // k = JSON.stringify(k);
+      // console.log(k, typeof k);
+      // let kk = k.replace(/,/gi, '\n');
+      // console.log(kk);
+
+      //********************************************************************************출력****************************************
+      //전체파일
+      console.log(userData);
+      console.log(subjectAreaList);
+      console.log(completeSubject);
+
+      //필수 안들은과목
+      console.log(leftSubject);
+      //안들은 영역
+      console.log(NotTakeList());
+
+      //과------------------------------------------------------------------------------------------------------------------------
+      let res3 = document.getElementById('res3');
+      res3.innerHTML = '수강하지않은 전공필수과목: ' + leftSubject;
+
+      let res4 = document.getElementById('res4');
+      res4.innerHTML = '수강하지않은 영역: ' + u;
+    });
+  };
+  //적어줘야지 실행됨
+  reader.readAsBinaryString(input.files[0]);
 }
