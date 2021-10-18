@@ -7,20 +7,19 @@ function ReturnTotalCredit(event) {
     let fileData = reader.result;
     let wb = XLSX.read(fileData, { type: 'binary' });
     const userData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+    const finalCreditIndex = userData.length - 4; //데이터 위치(졸업요건은 끝에서 4번째에 위치함)
+    const doubleMajorIndex = userData.length - 3; //데이터 위치(복수전공일경우, 연계전공일 경우)
+
+    const finalCredit = userData[finalCreditIndex].__EMPTY_24; //취득학점
+    const finalScore = userData[finalCreditIndex].__EMPTY_29; //평균평점
+    const doubleMajorCredit = userData[doubleMajorIndex].__EMPTY_16; //복수전공
+    const linkMajorCredit = userData[doubleMajorIndex].__EMPTY_23; //연계전공
+
+    const essentialMajorCredit = userData[finalCreditIndex].__EMPTY_8; //전공필수
+    const optionalMajorCredit = userData[finalCreditIndex].__EMPTY_13; //전공선택
+    const majorCredit = essentialMajorCredit + optionalMajorCredit; //본전공 이수학점
 
     wb.SheetNames.forEach(function (sheetName) {
-      //시트를 JSON파일로 변환
-      let finalCreditIndex = userData.length - 4; //데이터 위치(졸업요건은 끝에서 4번째에 위치함)
-      let doubleMajorIndex = userData.length - 3; //데이터 위치(복수전공일경우, 연계전공일 경우)
-
-      let finalCredit = userData[finalCreditIndex].__EMPTY_24; //취득학점
-      let finalScore = userData[finalCreditIndex].__EMPTY_29; //평균평점
-      let doubleMajorCredit = userData[doubleMajorIndex].__EMPTY_16; //복수전공
-      let linkMajorCredit = userData[doubleMajorIndex].__EMPTY_23; //연계전공
-
-      let essentialMajorCredit = userData[finalCreditIndex].__EMPTY_8; //전공필수
-      let optionalMajorCredit = userData[finalCreditIndex].__EMPTY_13; //전공선택
-      let majorCredit = essentialMajorCredit + optionalMajorCredit; //본전공 이수학점
       let userAdmissionYear = userID(); //입학년도
 
       let res1 = document.getElementById('res1');
