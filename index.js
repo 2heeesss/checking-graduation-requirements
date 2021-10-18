@@ -6,10 +6,10 @@ function ReturnTotalCredit(event) {
   reader.onload = function () {
     let fileData = reader.result;
     let wb = XLSX.read(fileData, { type: 'binary' });
+    const userData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
 
     wb.SheetNames.forEach(function (sheetName) {
       //시트를 JSON파일로 변환
-      const userData = XLSX.utils.sheet_to_json(wb.Sheets[sheetName]);
       let finalCreditIndex = userData.length - 4; //데이터 위치(졸업요건은 끝에서 4번째에 위치함)
       let doubleMajorIndex = userData.length - 3; //데이터 위치(복수전공일경우, 연계전공일 경우)
 
