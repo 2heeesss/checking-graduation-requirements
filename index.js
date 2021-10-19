@@ -7,6 +7,7 @@ function ReturnTotalCredit(event) {
     let fileData = reader.result;
     let wb = XLSX.read(fileData, { type: 'binary' });
     const userData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+
     const FINAL_CREDIT_IDX = userData.length - 4; //데이터 위치(졸업요건은 끝에서 4번째에 위치함)
     const DOUBLE_MAJOR_IDX = userData.length - 3; //데이터 위치(복수전공일경우, 연계전공일 경우)
 
