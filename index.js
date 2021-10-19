@@ -7,17 +7,17 @@ function ReturnTotalCredit(event) {
     let fileData = reader.result;
     let wb = XLSX.read(fileData, { type: 'binary' });
     const userData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
-    const finalCreditIndex = userData.length - 4; //데이터 위치(졸업요건은 끝에서 4번째에 위치함)
-    const doubleMajorIndex = userData.length - 3; //데이터 위치(복수전공일경우, 연계전공일 경우)
+    const FINAL_CREDIT_IDX = userData.length - 4; //데이터 위치(졸업요건은 끝에서 4번째에 위치함)
+    const DOUBLE_MAJOR_IDX = userData.length - 3; //데이터 위치(복수전공일경우, 연계전공일 경우)
 
-    const finalCredit = userData[finalCreditIndex].__EMPTY_24; //취득학점
-    const finalScore = userData[finalCreditIndex].__EMPTY_29; //평균평점
-    const doubleMajorCredit = userData[doubleMajorIndex].__EMPTY_16; //복수전공
-    const linkMajorCredit = userData[doubleMajorIndex].__EMPTY_23; //연계전공
+    const FINAL_CREDIT = userData[FINAL_CREDIT_IDX].__EMPTY_24; //취득학점
+    const FINAL_SCORE = userData[DOUBLE_MAJOR_IDX].__EMPTY_29; //평균평점
+    const DOUBLE_MAJOR_CREDIT = userData[DOUBLE_MAJOR_IDX].__EMPTY_16; //복수전공
+    const LINK_MAJOR_CREDIT = userData[DOUBLE_MAJOR_IDX].__EMPTY_23; //연계전공
 
-    const essentialMajorCredit = userData[finalCreditIndex].__EMPTY_8; //전공필수
-    const optionalMajorCredit = userData[finalCreditIndex].__EMPTY_13; //전공선택
-    const majorCredit = essentialMajorCredit + optionalMajorCredit; //본전공 이수학점
+    const ESSENTIAL_MAJOR_CREDIT = userData[FINAL_CREDIT_IDX].__EMPTY_8; //전공필수
+    const OPTIONAL_MAJOR_CREDIT = userData[DOUBLE_MAJOR_IDX].__EMPTY_13; //전공선택
+    const MAJOR_CREDIT = ESSENTIAL_MAJOR_CREDIT + OPTIONAL_MAJOR_CREDIT; //본전공 이수학점
 
     wb.SheetNames.forEach(function (sheetName) {
       let userAdmissionYear = userID(); //입학년도
@@ -30,8 +30,8 @@ function ReturnTotalCredit(event) {
 
       console.log('이름: ' + userData[0].__EMPTY_18);
       console.log('입학년도: ' + userAdmissionYear);
-      console.log('이수학점: ' + finalCredit);
-      console.log('최종 성적: ' + finalScore);
+      console.log('이수학점: ' + FINAL_CREDIT);
+      console.log('최종 성적: ' + FINAL_SCORE);
 
       CheckGraduationCredit();
 
@@ -98,7 +98,7 @@ function ReturnTotalCredit(event) {
         const after16FinalCredit = 130;
 
         if (userAdmissionYear <= 16) {
-          if (finalCredit >= before16FinalCredit) {
+          if (FINAL_CREDIT >= before16FinalCredit) {
             //state = console.log('16년이후기준: 총 졸업학점 채웠으');
             state =
               userAdmissionYear +
@@ -106,13 +106,13 @@ function ReturnTotalCredit(event) {
               before16FinalCredit +
               '</br>' +
               '이수 학점: ' +
-              finalCredit;
+              FINAL_CREDIT;
           } else {
             //state = console.log('16년이후기준: 총 졸업학점 아직 못채웠으');
             state = userAdmissionYear + '학년도 총 졸업학점 불만족';
           }
         } else if (userAdmissionYear > 16) {
-          if (finalCredit >= after16FinalCredit) {
+          if (FINAL_CREDIT >= after16FinalCredit) {
             //state = console.log('17년이후기준: 총 졸업학점 채웠으');
             state = userAdmissionYear + '학년도 총 졸업학점 만족';
           } else {
@@ -134,25 +134,25 @@ function ReturnTotalCredit(event) {
 
         if (userAdmissionYear <= 16) {
           if (CheckOnlyMajor() === 'double-major') {
-            if (majorCredit >= before16_MajorMustCredit) {
+            if (MAJOR_CREDIT >= before16_MajorMustCredit) {
               return '복전 본 o';
-            } else if (majorCredit < before16_MajorMustCredit) {
+            } else if (MAJOR_CREDIT < before16_MajorMustCredit) {
               return '복전 본 x';
             } else {
               return '이상해씨';
             }
           } else if (CheckOnlyMajor() === 'minor') {
-            if (majorCredit >= before16_MajorOfMinorCredit) {
+            if (MAJOR_CREDIT >= before16_MajorOfMinorCredit) {
               return '부전공 본 o';
-            } else if (majorCredit < before16_MajorOfMinorCredit) {
+            } else if (MAJOR_CREDIT < before16_MajorOfMinorCredit) {
               return '부전공 본 x';
             } else {
               return '이상해씨2';
             }
           } else if (CheckOnlyMajor() === 'major') {
-            if (majorCredit >= before16_OnlyMajorMustCredit) {
+            if (MAJOR_CREDIT >= before16_OnlyMajorMustCredit) {
               return '전공하나ㅇ';
-            } else if (majorCredit < before16_OnlyMajorMustCredit) {
+            } else if (MAJOR_CREDIT < before16_OnlyMajorMustCredit) {
               return '전공하나 x';
             } else {
               return '이상해씨3';
@@ -160,25 +160,25 @@ function ReturnTotalCredit(event) {
           }
         } else if (userAdmissionYear > 16) {
           if (CheckOnlyMajor() === 'double-major') {
-            if (majorCredit >= after16_MajorMustCredit) {
+            if (MAJOR_CREDIT >= after16_MajorMustCredit) {
               return '17복전 본 o';
-            } else if (majorCredit < after16_MajorMustCredit) {
+            } else if (MAJOR_CREDIT < after16_MajorMustCredit) {
               return '복전 본 x';
             } else {
               return '이상해씨';
             }
           } else if (CheckOnlyMajor() === 'minor') {
-            if (majorCredit >= after16_MajorOfMinorCredit) {
+            if (MAJOR_CREDIT >= after16_MajorOfMinorCredit) {
               return '17부전공 본 o';
-            } else if (majorCredit < after16_MajorOfMinorCredit) {
+            } else if (MAJOR_CREDIT < after16_MajorOfMinorCredit) {
               return '17부전공 본 x';
             } else {
               return '이상해씨2';
             }
           } else if (CheckOnlyMajor() === 'major') {
-            if (majorCredit >= after16_OnlyMajorMustCredit) {
+            if (MAJOR_CREDIT >= after16_OnlyMajorMustCredit) {
               return '17전공하나ㅇ';
-            } else if (majorCredit < after16_OnlyMajorMustCredit) {
+            } else if (MAJOR_CREDIT < after16_OnlyMajorMustCredit) {
               return '17전공하나 x';
             } else {
               return '이상해씨3';
@@ -194,10 +194,10 @@ function ReturnTotalCredit(event) {
 
         const MinorCredit = 21;
 
-        doubleMajorCredit = CheckCreditZero(doubleMajorCredit);
-        linkMajorCredit = CheckCreditZero(linkMajorCredit);
+        DOUBLE_MAJOR_CREDIT = CheckCreditZero(DOUBLE_MAJOR_CREDIT);
+        LINK_MAJOR_CREDIT = CheckCreditZero(LINK_MAJOR_CREDIT);
 
-        let doubleCredit = linkMajorCredit + doubleMajorCredit;
+        let doubleCredit = LINK_MAJOR_CREDIT + DOUBLE_MAJOR_CREDIT;
 
         console.log(doubleCredit);
 
