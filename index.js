@@ -20,9 +20,10 @@ function ReturnTotalCredit(event) {
     const OPTIONAL_MAJOR_CREDIT = userData[DOUBLE_MAJOR_IDX].__EMPTY_13; //전공선택
     const MAJOR_CREDIT = ESSENTIAL_MAJOR_CREDIT + OPTIONAL_MAJOR_CREDIT; //본전공 이수학점
 
-    wb.SheetNames.forEach(function (sheetName) {
-      let userAdmissionYear = userID(); //입학년도
+    const USER_STUDENT_ID = userData[0].__EMPTY_10;
+    const USER_ADMISSION_YEAR = parseInt(USER_STUDENT_ID.slice(0, 2));
 
+    wb.SheetNames.forEach(function (sheetName) {
       let res1 = document.getElementById('res1');
       res1.innerHTML = CheckMajorCredit();
 
@@ -30,7 +31,7 @@ function ReturnTotalCredit(event) {
       res2.innerHTML = CheckGraduationCredit();
 
       console.log('이름: ' + userData[0].__EMPTY_18);
-      console.log('입학년도: ' + userAdmissionYear);
+      console.log('입학년도: ' + USER_ADMISSION_YEAR);
       console.log('이수학점: ' + FINAL_CREDIT);
       console.log('최종 성적: ' + FINAL_SCORE);
 
@@ -84,25 +85,17 @@ function ReturnTotalCredit(event) {
         }
       }
 
-      //학번확인하기
-      function userID() {
-        let studentID = userData[0].__EMPTY_10;
-        let studentAdmissionYear = parseInt(studentID.slice(0, 2));
-
-        return studentAdmissionYear;
-      }
-
       //조건1. 총 졸업학점 채웠는지 확인***************************
       function CheckGraduationCredit() {
         let state;
         const before16FinalCredit = 140;
         const after16FinalCredit = 130;
 
-        if (userAdmissionYear <= 16) {
+        if (USER_ADMISSION_YEAR <= 16) {
           if (FINAL_CREDIT >= before16FinalCredit) {
             //state = console.log('16년이후기준: 총 졸업학점 채웠으');
             state =
-              userAdmissionYear +
+              USER_ADMISSION_YEAR +
               '학년 총 졸업학점: ' +
               before16FinalCredit +
               '</br>' +
@@ -110,15 +103,15 @@ function ReturnTotalCredit(event) {
               FINAL_CREDIT;
           } else {
             //state = console.log('16년이후기준: 총 졸업학점 아직 못채웠으');
-            state = userAdmissionYear + '학년도 총 졸업학점 불만족';
+            state = USER_ADMISSION_YEAR + '학년도 총 졸업학점 불만족';
           }
-        } else if (userAdmissionYear > 16) {
+        } else if (USER_ADMISSION_YEAR > 16) {
           if (FINAL_CREDIT >= after16FinalCredit) {
             //state = console.log('17년이후기준: 총 졸업학점 채웠으');
-            state = userAdmissionYear + '학년도 총 졸업학점 만족';
+            state = USER_ADMISSION_YEAR + '학년도 총 졸업학점 만족';
           } else {
             //state = console.log('17년이후기준: 총 졸업학점 아직 못채웠으');
-            state = userAdmissionYear + '학년도 총 졸업학점 불만족';
+            state = USER_ADMISSION_YEAR + '학년도 총 졸업학점 불만족';
           }
         }
 
@@ -133,7 +126,7 @@ function ReturnTotalCredit(event) {
         const before16_MajorOfMinorCredit = 60;
         const after16_MajorOfMinorCredit = 54;
 
-        if (userAdmissionYear <= 16) {
+        if (USER_ADMISSION_YEAR <= 16) {
           if (CheckOnlyMajor() === 'double-major') {
             if (MAJOR_CREDIT >= before16_MajorMustCredit) {
               return '복전 본 o';
@@ -159,7 +152,7 @@ function ReturnTotalCredit(event) {
               return '이상해씨3';
             }
           }
-        } else if (userAdmissionYear > 16) {
+        } else if (USER_ADMISSION_YEAR > 16) {
           if (CheckOnlyMajor() === 'double-major') {
             if (MAJOR_CREDIT >= after16_MajorMustCredit) {
               return '17복전 본 o';
@@ -203,7 +196,7 @@ function ReturnTotalCredit(event) {
         console.log(doubleCredit);
 
         let state = '';
-        if (userAdmissionYear <= 16) {
+        if (USER_ADMISSION_YEAR <= 16) {
           if (CheckOnlyMajor() === 'double-major') {
             if (doubleCredit >= before16_DoubleMajorMustCredit) {
               return '복전 o';
@@ -221,7 +214,7 @@ function ReturnTotalCredit(event) {
               return '이상해씨2';
             }
           }
-        } else if (userAdmissionYear > 16) {
+        } else if (USER_ADMISSION_YEAR > 16) {
           if (CheckOnlyMajor() === 'double-major') {
             if (doubleCredit >= after16_DoubleMajorMustCredit) {
               return '17복전 o';
