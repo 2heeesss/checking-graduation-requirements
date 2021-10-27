@@ -16,11 +16,9 @@ const USER_ADMISSION_YEAR = parseInt(USER_STUDENT_ID.slice(0, 2));
 
 
 test('복수전공을 하였다면 double-major이다.', () => {
-    expect(fn.CheckDoubleMajorOrMinor(userData)).toBe('double-major');
+    expect(fn.isOneOrTwoMajor(userData)).toBe('double-major');
 });
 
 test('부전공을 하지않았다면 minor이 아니다.', () => {
-    expect(fn.CheckDoubleMajorOrMinor(userData)).not.toBe('minor');
+    expect(fn.isOneOrTwoMajor(userData)).not.toBe('minor');
 });
-
-console.log(userData);

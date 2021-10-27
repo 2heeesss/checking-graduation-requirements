@@ -13,7 +13,7 @@ const USER_STUDENT_ID = userData[0].__EMPTY_10;
 const USER_ADMISSION_YEAR = parseInt(USER_STUDENT_ID.slice(0, 2));
 
 const fn = {
-    CheckDoubleMajorOrMinor: (data) => {
+    isOneOrTwoMajor: (data) => {
         for (const cell of data) {
             if (!cell.__EMPTY_28) {
                 continue;
@@ -25,8 +25,8 @@ const fn = {
                 return 'minor';
             }
         }
-        return false;
-    }
+        return 'major';
+    },
 };
 
 module.exports = fn;
