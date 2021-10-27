@@ -1,0 +1,22 @@
+{
+  "name": "checking-graduation-requirements",
+  "version": "1.0.0",
+  "description": "실행영상 <img width=\"80%\" src=\"https://user-images.githubusercontent.com/65802921/127135361-f8b616cc-8ffe-4e8b-889d-72a59889a953.gif\"/>",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2heeesss/checking-graduation-requirements.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/2heeesss/checking-graduation-requirements/issues"
+  },
+  "homepage": "https://github.com/2heeesss/checking-graduation-requirements#readme",
+  "devDependencies": {
+    "jest": "^27.3.1"
+  }
+}
