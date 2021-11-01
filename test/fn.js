@@ -8,12 +8,12 @@ const fn = {
             }
 
             if (cell.__EMPTY_28.includes('복수전공')) {
-                return 'double-major';
+                return '복수전공';
             } else if (cell.__EMPTY_28.includes('부전공')) {
-                return 'minor';
+                return '부전공';
             }
         }
-        return 'major';
+        return '전공';
     },
 };
 

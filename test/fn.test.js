@@ -15,10 +15,10 @@ const USER_STUDENT_ID = userData[0].__EMPTY_10;
 const USER_ADMISSION_YEAR = parseInt(USER_STUDENT_ID.slice(0, 2));
 
 
-test('복수전공을 하였다면 double-major이다.', () => {
-    expect(fn.isOneOrTwoMajor(userData)).toBe('double-major');
+test('복수전공을 하였다면 반환값이 복수전공이다.', () => {
+    expect(fn.isOneOrTwoMajor(userData)).toBe('복수전공');
 });
 
-test('부전공을 하지않았다면 minor이 아니다.', () => {
-    expect(fn.isOneOrTwoMajor(userData)).not.toBe('minor');
+test('복수전공을 하지않았다면 반환값이 부전공이 아니다.', () => {
+    expect(fn.isOneOrTwoMajor(userData)).not.toBe('부전공');
 });
