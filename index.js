@@ -57,21 +57,13 @@ function ReturnTotalCredit(event) {
           }
 
           if (cell.__EMPTY_28.includes('복수전공')) {
-            return 'double-major';
+            return '복수전공';
           } else if (cell.__EMPTY_28.includes('부전공')) {
-            return 'minor';
+            return '부전공';
           }
         }
-        return 'major';
+        return '전공';
       }
-      //부전 or 복전 or 본전 확인
-      // function CheckOnlyMajor() {
-      //   if (isOneOrTwoMajor() === undefined) {
-      //     return 'major';
-      //   } else {
-      //     return isOneOrTwoMajor();
-      //   }
-      // }
 
       //학점 undefined 인거 0으로 바꿔주기
       function CheckCreditZero(userMajorCredit) {
@@ -124,7 +116,7 @@ function ReturnTotalCredit(event) {
         const after16_MajorOfMinorCredit = 54;
 
         if (USER_ADMISSION_YEAR <= 16) {
-          if (CheckOnlyMajor() === 'double-major') {
+          if (CheckOnlyMajor() === '복수전공') {
             if (MAJOR_CREDIT >= before16_MajorMustCredit) {
               return '복전 본 o';
             } else if (MAJOR_CREDIT < before16_MajorMustCredit) {
@@ -132,7 +124,7 @@ function ReturnTotalCredit(event) {
             } else {
               return '이상해씨';
             }
-          } else if (CheckOnlyMajor() === 'minor') {
+          } else if (CheckOnlyMajor() === '부전공') {
             if (MAJOR_CREDIT >= before16_MajorOfMinorCredit) {
               return '부전공 본 o';
             } else if (MAJOR_CREDIT < before16_MajorOfMinorCredit) {
@@ -140,7 +132,7 @@ function ReturnTotalCredit(event) {
             } else {
               return '이상해씨2';
             }
-          } else if (CheckOnlyMajor() === 'major') {
+          } else if (CheckOnlyMajor() === '전공') {
             if (MAJOR_CREDIT >= before16_OnlyMajorMustCredit) {
               return '전공하나ㅇ';
             } else if (MAJOR_CREDIT < before16_OnlyMajorMustCredit) {
@@ -150,7 +142,7 @@ function ReturnTotalCredit(event) {
             }
           }
         } else if (USER_ADMISSION_YEAR > 16) {
-          if (isOneOrTwoMajor(userData) === 'double-major') {
+          if (isOneOrTwoMajor(userData) === '복수전공') {
             if (MAJOR_CREDIT >= after16_MajorMustCredit) {
               return '17복전 본 o';
             } else if (MAJOR_CREDIT < after16_MajorMustCredit) {
@@ -158,7 +150,7 @@ function ReturnTotalCredit(event) {
             } else {
               return '이상해씨';
             }
-          } else if (isOneOrTwoMajor(userData) === 'minor') {
+          } else if (isOneOrTwoMajor(userData) === '부전공') {
             if (MAJOR_CREDIT >= after16_MajorOfMinorCredit) {
               return '17부전공 본 o';
             } else if (MAJOR_CREDIT < after16_MajorOfMinorCredit) {
@@ -166,7 +158,7 @@ function ReturnTotalCredit(event) {
             } else {
               return '이상해씨2';
             }
-          } else if (isOneOrTwoMajor(userData) === 'major') {
+          } else if (isOneOrTwoMajor(userData) === '전공') {
             if (MAJOR_CREDIT >= after16_OnlyMajorMustCredit) {
               return '17전공하나ㅇ';
             } else if (MAJOR_CREDIT < after16_OnlyMajorMustCredit) {
@@ -194,7 +186,7 @@ function ReturnTotalCredit(event) {
 
         let state = '';
         if (USER_ADMISSION_YEAR <= 16) {
-          if (isOneOrTwoMajor(userData) === 'double-major') {
+          if (isOneOrTwoMajor(userData) === '복수전공') {
             if (doubleCredit >= before16_DoubleMajorMustCredit) {
               return '복전 o';
             } else if (doubleCredit < before16_DoubleMajorMustCredit) {
@@ -202,7 +194,7 @@ function ReturnTotalCredit(event) {
             } else {
               return '이상해씨';
             }
-          } else if (isOneOrTwoMajor(userData) === 'minor') {
+          } else if (isOneOrTwoMajor(userData) === '부전공') {
             if (doubleCredit >= MinorCredit) {
               return '부전공 o';
             } else if (doubleCredit < MinorCredit) {
@@ -212,7 +204,7 @@ function ReturnTotalCredit(event) {
             }
           }
         } else if (USER_ADMISSION_YEAR > 16) {
-          if (isOneOrTwoMajor(userData) === 'double-major') {
+          if (isOneOrTwoMajor(userData) === '복수전공') {
             if (doubleCredit >= after16_DoubleMajorMustCredit) {
               return '17복전 o';
             } else if (doubleCredit < after16_DoubleMajorMustCredit) {
@@ -220,7 +212,7 @@ function ReturnTotalCredit(event) {
             } else {
               return '이상해씨';
             }
-          } else if (isOneOrTwoMajor(userData) === 'minor') {
+          } else if (isOneOrTwoMajor(userData) === '부전공') {
             if (doubleCredit >= MinorCredit) {
               return '17부전 o';
             } else if (doubleCredit < MinorCredit) {
