@@ -1,33 +1,33 @@
-//첫번째 엑셀체킹
+// 첫번째 엑셀체킹
 function ReturnTotalCredit(event) {
-  let input = event.target;
-  let reader = new FileReader();
+  const input = event.target;
+  const reader = new FileReader();
 
   reader.onload = function () {
-    let fileData = reader.result;
-    let wb = XLSX.read(fileData, { type: 'binary' });
+    const fileData = reader.result;
+    const wb = XLSX.read(fileData, { type: 'binary' });
     const userData = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
 
-    const FINAL_CREDIT_IDX = userData.length - 4; //데이터 위치(졸업요건은 끝에서 4번째에 위치함)
-    const DOUBLE_MAJOR_IDX = userData.length - 3; //데이터 위치(복수전공일경우, 연계전공일 경우)
+    const FINAL_CREDIT_IDX = userData.length - 4; // 데이터 위치(졸업요건은 끝에서 4번째에 위치함)
+    const DOUBLE_MAJOR_IDX = userData.length - 3; // 데이터 위치(복수전공일경우, 연계전공일 경우)
 
-    const FINAL_CREDIT = userData[FINAL_CREDIT_IDX].__EMPTY_24; //취득학점
-    const FINAL_SCORE = userData[DOUBLE_MAJOR_IDX].__EMPTY_29; //평균평점
-    const DOUBLE_MAJOR_CREDIT = userData[DOUBLE_MAJOR_IDX].__EMPTY_16; //복수전공
-    const LINK_MAJOR_CREDIT = userData[DOUBLE_MAJOR_IDX].__EMPTY_23; //연계전공
+    const FINAL_CREDIT = userData[FINAL_CREDIT_IDX].__EMPTY_24; // 취득학점
+    const FINAL_SCORE = userData[DOUBLE_MAJOR_IDX].__EMPTY_29; // 평균평점
+    const DOUBLE_MAJOR_CREDIT = userData[DOUBLE_MAJOR_IDX].__EMPTY_16; // 복수전공
+    const LINK_MAJOR_CREDIT = userData[DOUBLE_MAJOR_IDX].__EMPTY_23; // 연계전공
 
-    const ESSENTIAL_MAJOR_CREDIT = userData[FINAL_CREDIT_IDX].__EMPTY_8; //전공필수
-    const OPTIONAL_MAJOR_CREDIT = userData[DOUBLE_MAJOR_IDX].__EMPTY_13; //전공선택
-    const MAJOR_CREDIT = ESSENTIAL_MAJOR_CREDIT + OPTIONAL_MAJOR_CREDIT; //본전공 이수학점
+    const ESSENTIAL_MAJOR_CREDIT = userData[FINAL_CREDIT_IDX].__EMPTY_8; // 전공필수
+    const OPTIONAL_MAJOR_CREDIT = userData[DOUBLE_MAJOR_IDX].__EMPTY_13; // 전공선택
+    const MAJOR_CREDIT = ESSENTIAL_MAJOR_CREDIT + OPTIONAL_MAJOR_CREDIT; // 본전공 이수학점
 
     const USER_STUDENT_ID = userData[0].__EMPTY_10;
     const USER_ADMISSION_YEAR = parseInt(USER_STUDENT_ID.slice(0, 2));
 
-    wb.SheetNames.forEach(function (sheetName) {
-      let res1 = document.getElementById('res1');
+    wb.SheetNames.forEach((sheetName) => {
+      const res1 = document.getElementById('res1');
       res1.innerHTML = CheckMajorCredit();
 
-      let res2 = document.getElementById('res2');
+      const res2 = document.getElementById('res2');
       res2.innerHTML = CheckGraduationCredit();
 
       console.log('이름: ' + userData[0].__EMPTY_18);
@@ -43,13 +43,13 @@ function ReturnTotalCredit(event) {
       console.log(CheckMajorCredit());
       console.log(CheckDoubleMajorCredit());
 
-      //함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      //함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      //함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      //함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      //함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      // 함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      // 함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      // 함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      // 함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      // 함수s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-      //복전 or 부전 확인
+      // 복전 or 부전 확인
       function isOneOrTwoMajor(data) {
         for (const cell of data) {
           if (!cell.__EMPTY_28) {
@@ -58,23 +58,23 @@ function ReturnTotalCredit(event) {
 
           if (cell.__EMPTY_28.includes('복수전공')) {
             return '복수전공';
-          } else if (cell.__EMPTY_28.includes('부전공')) {
+          }
+          if (cell.__EMPTY_28.includes('부전공')) {
             return '부전공';
           }
         }
         return '전공';
       }
 
-      //학점 undefined 인거 0으로 바꿔주기
+      // 학점 undefined 인거 0으로 바꿔주기
       function CheckCreditZero(userMajorCredit) {
         if (userMajorCredit === undefined) {
           return (userMajorCredit = 0);
-        } else {
-          return parseInt(userMajorCredit);
         }
+        return parseInt(userMajorCredit);
       }
 
-      //조건1. 총 졸업학점 채웠는지 확인***************************
+      // 조건1. 총 졸업학점 채웠는지 확인***************************
       function CheckGraduationCredit() {
         let state;
         const before16FinalCredit = 140;
@@ -82,31 +82,25 @@ function ReturnTotalCredit(event) {
 
         if (USER_ADMISSION_YEAR <= 16) {
           if (FINAL_CREDIT >= before16FinalCredit) {
-            //state = console.log('16년이후기준: 총 졸업학점 채웠으');
-            state =
-              USER_ADMISSION_YEAR +
-              '학년 총 졸업학점: ' +
-              before16FinalCredit +
-              '</br>' +
-              '이수 학점: ' +
-              FINAL_CREDIT;
+            // state = console.log('16년이후기준: 총 졸업학점 채웠으');
+            state = USER_ADMISSION_YEAR + '학년 총 졸업학점: ' + before16FinalCredit + '</br>' + '이수 학점: ' + FINAL_CREDIT;
           } else {
-            //state = console.log('16년이후기준: 총 졸업학점 아직 못채웠으');
+            // state = console.log('16년이후기준: 총 졸업학점 아직 못채웠으');
             state = USER_ADMISSION_YEAR + '학년도 총 졸업학점 불만족';
           }
         } else if (USER_ADMISSION_YEAR > 16) {
           if (FINAL_CREDIT >= after16FinalCredit) {
-            //state = console.log('17년이후기준: 총 졸업학점 채웠으');
+            // state = console.log('17년이후기준: 총 졸업학점 채웠으');
             state = USER_ADMISSION_YEAR + '학년도 총 졸업학점 만족';
           } else {
-            //state = console.log('17년이후기준: 총 졸업학점 아직 못채웠으');
+            // state = console.log('17년이후기준: 총 졸업학점 아직 못채웠으');
             state = USER_ADMISSION_YEAR + '학년도 총 졸업학점 불만족';
           }
         }
 
         return state;
       }
-      //복전 본전공 확인
+      // 복전 본전공 확인
       function CheckMajorCredit() {
         const before16_MajorMustCredit = 42;
         const after16_MajorMustCredit = 39;
@@ -119,38 +113,41 @@ function ReturnTotalCredit(event) {
           if (CheckOnlyMajor() === '복수전공') {
             if (MAJOR_CREDIT >= before16_MajorMustCredit) {
               return '복전 본 o';
-            } else if (MAJOR_CREDIT < before16_MajorMustCredit) {
-              return '복전 본 x';
-            } else {
-              return '이상해씨';
             }
-          } else if (CheckOnlyMajor() === '부전공') {
+            if (MAJOR_CREDIT < before16_MajorMustCredit) {
+              return '복전 본 x';
+            }
+            return '이상해씨';
+          }
+          if (CheckOnlyMajor() === '부전공') {
             if (MAJOR_CREDIT >= before16_MajorOfMinorCredit) {
               return '부전공 본 o';
-            } else if (MAJOR_CREDIT < before16_MajorOfMinorCredit) {
-              return '부전공 본 x';
-            } else {
-              return '이상해씨2';
             }
-          } else if (CheckOnlyMajor() === '전공') {
+            if (MAJOR_CREDIT < before16_MajorOfMinorCredit) {
+              return '부전공 본 x';
+            }
+            return '이상해씨2';
+          }
+          if (CheckOnlyMajor() === '전공') {
             if (MAJOR_CREDIT >= before16_OnlyMajorMustCredit) {
               return '전공하나ㅇ';
-            } else if (MAJOR_CREDIT < before16_OnlyMajorMustCredit) {
-              return '전공하나 x';
-            } else {
-              return '이상해씨3';
             }
+            if (MAJOR_CREDIT < before16_OnlyMajorMustCredit) {
+              return '전공하나 x';
+            }
+            return '이상해씨3';
           }
         } else if (USER_ADMISSION_YEAR > 16) {
           if (isOneOrTwoMajor(userData) === '복수전공') {
             if (MAJOR_CREDIT >= after16_MajorMustCredit) {
               return '17복전 본 o';
-            } else if (MAJOR_CREDIT < after16_MajorMustCredit) {
-              return '복전 본 x';
-            } else {
-              return '이상해씨';
             }
-          } else if (isOneOrTwoMajor(userData) === '부전공') {
+            if (MAJOR_CREDIT < after16_MajorMustCredit) {
+              return '복전 본 x';
+            }
+            return '이상해씨';
+          }
+          if (isOneOrTwoMajor(userData) === '부전공') {
             if (MAJOR_CREDIT >= after16_MajorOfMinorCredit) {
               return '17부전공 본 o';
             } else if (MAJOR_CREDIT < after16_MajorOfMinorCredit) {
@@ -170,7 +167,7 @@ function ReturnTotalCredit(event) {
         }
       }
 
-      //조건2. 전공이수학점 채웠는지 확인***************************
+      // 조건2. 전공이수학점 채웠는지 확인***************************
       function CheckDoubleMajorCredit() {
         const before16_DoubleMajorMustCredit = 42;
         const after16_DoubleMajorMustCredit = 39;
@@ -180,98 +177,96 @@ function ReturnTotalCredit(event) {
         DOUBLE_MAJOR_CREDIT = CheckCreditZero(DOUBLE_MAJOR_CREDIT);
         LINK_MAJOR_CREDIT = CheckCreditZero(LINK_MAJOR_CREDIT);
 
-        let doubleCredit = LINK_MAJOR_CREDIT + DOUBLE_MAJOR_CREDIT;
+        const doubleCredit = LINK_MAJOR_CREDIT + DOUBLE_MAJOR_CREDIT;
 
         console.log(doubleCredit);
 
-        let state = '';
+        const state = '';
         if (USER_ADMISSION_YEAR <= 16) {
           if (isOneOrTwoMajor(userData) === '복수전공') {
             if (doubleCredit >= before16_DoubleMajorMustCredit) {
               return '복전 o';
-            } else if (doubleCredit < before16_DoubleMajorMustCredit) {
-              return '복전 x';
-            } else {
-              return '이상해씨';
             }
-          } else if (isOneOrTwoMajor(userData) === '부전공') {
+            if (doubleCredit < before16_DoubleMajorMustCredit) {
+              return '복전 x';
+            }
+            return '이상해씨';
+          }
+          if (isOneOrTwoMajor(userData) === '부전공') {
             if (doubleCredit >= MinorCredit) {
               return '부전공 o';
-            } else if (doubleCredit < MinorCredit) {
-              return '부전공 x';
-            } else {
-              return '이상해씨2';
             }
+            if (doubleCredit < MinorCredit) {
+              return '부전공 x';
+            }
+            return '이상해씨2';
           }
         } else if (USER_ADMISSION_YEAR > 16) {
           if (isOneOrTwoMajor(userData) === '복수전공') {
             if (doubleCredit >= after16_DoubleMajorMustCredit) {
               return '17복전 o';
-            } else if (doubleCredit < after16_DoubleMajorMustCredit) {
-              return '17복전 x';
-            } else {
-              return '이상해씨';
             }
-          } else if (isOneOrTwoMajor(userData) === '부전공') {
+            if (doubleCredit < after16_DoubleMajorMustCredit) {
+              return '17복전 x';
+            }
+            return '이상해씨';
+          }
+          if (isOneOrTwoMajor(userData) === '부전공') {
             if (doubleCredit >= MinorCredit) {
               return '17부전 o';
-            } else if (doubleCredit < MinorCredit) {
-              return '17부전 x';
-            } else {
-              return '이상해애애씨';
             }
+            if (doubleCredit < MinorCredit) {
+              return '17부전 x';
+            }
+            return '이상해애애씨';
           }
         }
       }
     });
   };
-  //적어줘야지 실행됨
+  // 적어줘야지 실행됨
   reader.readAsBinaryString(input.files[0]);
 }
 
-//두번째 엑셀체킹 시작하는겨---------------------------------------------------------------
+// 두번째 엑셀체킹 시작하는겨---------------------------------------------------------------
 function CheckCompulsorySubject(event) {
-  let input = event.target;
-  let reader = new FileReader();
+  const input = event.target;
+  const reader = new FileReader();
 
   reader.onload = function () {
-    let fileData = reader.result;
-    let workbook = XLSX.read(fileData, { bookType: 'xlsx', type: 'binary' });
+    const fileData = reader.result;
+    const workbook = XLSX.read(fileData, { bookType: 'xlsx', type: 'binary' });
 
-    workbook.SheetNames.forEach(function (sheetName) {
-      //시트를 JSON파일로 변환
-      let userData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+    workbook.SheetNames.forEach((sheetName) => {
+      // 시트를 JSON파일로 변환
+      const userData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
       let completeSubject = [];
       let leftSubject = [];
       let subjectAreaList = [];
 
-      //필수과목
+      // 필수과목
       function MustSubjectList() {
         for (let i = 0; i < userData.length; i++) {
           if (userData[i].선택구분 === undefined) {
             if (userData[i].취득 === ' ') {
               leftSubject[i] = userData[i].교과목명;
             } else {
-              //모두수강했으
+              // 모두수강했으
             }
           }
         }
       }
 
-      //선택영역
+      // 선택영역
       function ChoiceSubjectList() {
         for (let i = 0; i < userData.length; i++) {
           if (userData[i].선택구분 !== undefined) {
             subjectAreaList[i] = userData[i].영역구분;
             for (let j = 0; j < userData.length; j++) {
-              if (
-                userData[i].영역구분 === userData[j].영역구분 &&
-                userData[j].취득 &&
-                userData[j].취득.includes('성적')
-              ) {
+              if (userData[i].영역구분 === userData[j].영역구분 && userData[j].취득 && userData[j].취득.includes('성적')) {
                 completeSubject[i] = userData[i].영역구분;
               } else {
-                //안들은건 괜츈
+                // 안들은건 괜츈
               }
             }
           }
@@ -324,16 +319,14 @@ function CheckCompulsorySubject(event) {
 
       // 수강하지않은 영역
       function NotTakeList() {
-        let newList = subjectAreaList.filter(function (x) {
-          return completeSubject.indexOf(x) < 0;
-        });
+        const newList = subjectAreaList.filter((x) => completeSubject.indexOf(x) < 0);
         return newList;
       }
 
       // 2차원 배열 생성
       function create2DArray(rows, columns) {
-        let arr = new Array(rows);
-        for (var i = 0; i < rows; i++) {
+        const arr = new Array(rows);
+        for (let i = 0; i < rows; i++) {
           arr[i] = new Array(columns);
         }
         return arr;
@@ -349,8 +342,8 @@ function CheckCompulsorySubject(event) {
       }
       console.log(FindOldStudent());
 
-      let notTakelist = create2DArray(NotTakeList().length, userData.length);
-      let countList = [];
+      const notTakelist = create2DArray(NotTakeList().length, userData.length);
+      const countList = [];
       let count = 0;
       function NotTakeSubjectList() {
         for (let i = 0; i < NotTakeList().length; i++) {
@@ -383,7 +376,7 @@ function CheckCompulsorySubject(event) {
       ListSplice();
 
       function ListJoinOR() {
-        let okok = [];
+        const okok = [];
         for (let i = 0; i < NotTakeList().length; i++) {
           okok[i] = notTakelist[i].join(' or ');
         }
@@ -395,7 +388,7 @@ function CheckCompulsorySubject(event) {
       console.log(notTakelist);
       console.log(ListJoinOR());
       console.log(typeof ListJoinOR());
-      let k = ListJoinOR();
+      const k = ListJoinOR();
 
       function EnterList(List) {
         let newList = '';
@@ -404,40 +397,40 @@ function CheckCompulsorySubject(event) {
         }
         return newList;
       }
-      let u = EnterList(ListJoinOR());
+      const u = EnterList(ListJoinOR());
 
-      //오브젝트를 문자열로
-      //var result = test.replace('가', '나');
+      // 오브젝트를 문자열로
+      // var result = test.replace('가', '나');
 
       // k = JSON.stringify(k);
       // console.log(k, typeof k);
       // let kk = k.replace(/,/gi, '\n');
       // console.log(kk);
 
-      //********************************************************************************출력****************************************
-      //전체파일
+      //* *******************************************************************************출력****************************************
+      // 전체파일
       console.log(userData);
       console.log(subjectAreaList);
       console.log(completeSubject);
 
-      //필수 안들은과목
+      // 필수 안들은과목
       console.log(leftSubject);
-      //안들은 영역
+      // 안들은 영역
       console.log(NotTakeList());
 
-      //과------------------------------------------------------------------------------------------------------------------------
-      let res3 = document.getElementById('res3');
+      // 과------------------------------------------------------------------------------------------------------------------------
+      const res3 = document.getElementById('res3');
       res3.innerHTML = '수강하지않은 전공필수과목: ' + leftSubject;
 
-      let res4 = document.getElementById('res4');
+      const res4 = document.getElementById('res4');
       res4.innerHTML = '수강하지않은 영역: ' + u;
     });
   };
-  //적어줘야지 실행됨
+  // 적어줘야지 실행됨
   reader.readAsBinaryString(input.files[0]);
 }
 
-let a = document.getElementById('modal');
+const a = document.getElementById('modal');
 
 function OpenModal() {
   a.style.display = 'block';
@@ -448,47 +441,43 @@ function CloseModal() {
 }
 
 function Check(event) {
-  let input = event.target;
-  let reader = new FileReader();
+  const input = event.target;
+  const reader = new FileReader();
 
   reader.onload = function () {
-    let fileData = reader.result;
-    let workbook = XLSX.read(fileData, { bookType: 'xlsx', type: 'binary' });
+    const fileData = reader.result;
+    const workbook = XLSX.read(fileData, { bookType: 'xlsx', type: 'binary' });
 
-    workbook.SheetNames.forEach(function (sheetName) {
-      //시트를 JSON파일로 변환
-      let userData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+    workbook.SheetNames.forEach((sheetName) => {
+      // 시트를 JSON파일로 변환
+      const userData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
       let completeSubject = [];
       let leftSubject = [];
       let subjectAreaList = [];
 
-      //필수과목
+      // 필수과목
       function MustSubjectList() {
         for (let i = 0; i < userData.length; i++) {
           if (userData[i].선택구분 === undefined) {
             if (userData[i].취득 === ' ') {
               leftSubject[i] = userData[i].교과목명;
             } else {
-              //모두수강했으
+              // 모두수강했으
             }
           }
         }
       }
 
-      //선택영역
+      // 선택영역
       function ChoiceSubjectList() {
         for (let i = 0; i < userData.length; i++) {
           if (userData[i].선택구분 !== undefined) {
             subjectAreaList[i] = userData[i].영역구분;
             for (let j = 0; j < userData.length; j++) {
-              if (
-                userData[i].영역구분 === userData[j].영역구분 &&
-                userData[j].취득 &&
-                userData[j].취득.includes('성적')
-              ) {
+              if (userData[i].영역구분 === userData[j].영역구분 && userData[j].취득 && userData[j].취득.includes('성적')) {
                 completeSubject[i] = userData[i].영역구분;
               } else {
-                //안들은건 괜츈
+                // 안들은건 괜츈
               }
             }
           }
@@ -541,16 +530,14 @@ function Check(event) {
 
       // 수강하지않은 영역
       function NotTakeList() {
-        let newList = subjectAreaList.filter(function (x) {
-          return completeSubject.indexOf(x) < 0;
-        });
+        const newList = subjectAreaList.filter((x) => completeSubject.indexOf(x) < 0);
         return newList;
       }
 
       // 2차원 배열 생성
       function create2DArray(rows, columns) {
-        let arr = new Array(rows);
-        for (var i = 0; i < rows; i++) {
+        const arr = new Array(rows);
+        for (let i = 0; i < rows; i++) {
           arr[i] = new Array(columns);
         }
         return arr;
@@ -566,8 +553,8 @@ function Check(event) {
       }
       console.log(FindOldStudent());
 
-      let notTakelist = create2DArray(NotTakeList().length, userData.length);
-      let countList = [];
+      const notTakelist = create2DArray(NotTakeList().length, userData.length);
+      const countList = [];
       let count = 0;
       function NotTakeSubjectList() {
         for (let i = 0; i < NotTakeList().length; i++) {
@@ -600,7 +587,7 @@ function Check(event) {
       ListSplice();
 
       function ListJoinOR() {
-        let okok = [];
+        const okok = [];
         for (let i = 0; i < NotTakeList().length; i++) {
           okok[i] = notTakelist[i].join(' or ');
         }
@@ -612,7 +599,7 @@ function Check(event) {
       console.log(notTakelist);
       console.log(ListJoinOR());
       console.log(typeof ListJoinOR());
-      let k = ListJoinOR();
+      const k = ListJoinOR();
 
       function EnterList(List) {
         let newList = '';
@@ -621,35 +608,35 @@ function Check(event) {
         }
         return newList;
       }
-      let u = EnterList(ListJoinOR());
+      const u = EnterList(ListJoinOR());
 
-      //오브젝트를 문자열로
-      //var result = test.replace('가', '나');
+      // 오브젝트를 문자열로
+      // var result = test.replace('가', '나');
 
       // k = JSON.stringify(k);
       // console.log(k, typeof k);
       // let kk = k.replace(/,/gi, '\n');
       // console.log(kk);
 
-      //********************************************************************************출력****************************************
-      //전체파일
+      //* *******************************************************************************출력****************************************
+      // 전체파일
       console.log(userData);
       console.log(subjectAreaList);
       console.log(completeSubject);
 
-      //필수 안들은과목
+      // 필수 안들은과목
       console.log(leftSubject);
-      //안들은 영역
+      // 안들은 영역
       console.log(NotTakeList());
 
-      //과------------------------------------------------------------------------------------------------------------------------
-      let res3 = document.getElementById('res3');
+      // 과------------------------------------------------------------------------------------------------------------------------
+      const res3 = document.getElementById('res3');
       res3.innerHTML = '수강하지않은 전공필수과목: ' + leftSubject;
 
-      let res4 = document.getElementById('res4');
+      const res4 = document.getElementById('res4');
       res4.innerHTML = '수강하지않은 영역: ' + u;
     });
   };
-  //적어줘야지 실행됨
+  // 적어줘야지 실행됨
   reader.readAsBinaryString(input.files[0]);
 }
